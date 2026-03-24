@@ -52,7 +52,10 @@ app.post('/api/report', (req, res) => {
 
   entries.unshift(entry); // newest first
   broadcast({ type: 'new_entry', entry });
-  res.status(201).json({ success: true, id: entry.id });
+  const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:3000';
+  const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+  const dashboardUrl = `${protocol}://${host}`;
+  res.status(201).json({ success: true, id: entry.id, dashboard_url: dashboardUrl });
 });
 
 // GET /api/reports — return all stored reports
