@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -32,6 +32,10 @@
           <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
           API Docs
         </a>
+        <button class="nav-item theme-toggle" onclick="toggleTheme()" id="themeToggleBtn">
+          <svg id="themeIcon" viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+          <span id="themeLabel">Light Mode</span>
+        </button>
       </nav>
       <div class="sidebar-status">
         <span class="status-dot" id="statusDot"></span>
@@ -105,6 +109,7 @@
         <h3>POST /api/report</h3>
         <p>Push a new competitor intelligence report to the dashboard.</p>
         <pre><code id="examplePayload">{
+  "company_name": "string",
   "strategic_headline": "string",
   "what_they_are_building": "string",
   "team_growth_signals": "string",
@@ -125,6 +130,7 @@
           <pre><code>curl -X POST http://localhost:3000/api/report \
   -H "Content-Type: application/json" \
   -d '{
+    "company_name": "Adobe",
     "strategic_headline": "Adobe is embedding GenAI...",
     "what_they_are_building": "They are investing in...",
     "team_growth_signals": "One mid-level position...",

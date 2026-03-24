@@ -1,7 +1,8 @@
 /* ── Reset & Base ─────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
+/* Dark theme (default) */
+:root, [data-theme="dark"] {
   --bg: #0f0f13;
   --surface: #16161e;
   --surface-2: #1e1e2a;
@@ -25,6 +26,32 @@
   --radius-sm: 8px;
   --shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
+
+/* Light theme */
+[data-theme="light"] {
+  --bg: #f4f4f8;
+  --surface: #ffffff;
+  --surface-2: #f0f0f5;
+  --surface-3: #e4e4ec;
+  --border: #dcdce8;
+  --text: #111118;
+  --text-muted: #52526e;
+  --text-dim: #9898b8;
+  --accent: #4f52e0;
+  --accent-2: #7c3aed;
+  --high: #dc2626;
+  --high-bg: #fef2f2;
+  --high-border: #fecaca;
+  --medium: #d97706;
+  --medium-bg: #fffbeb;
+  --medium-border: #fde68a;
+  --low: #16a34a;
+  --low-bg: #f0fdf4;
+  --low-border: #bbf7d0;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+
+html { transition: background 0.2s, color 0.2s; }
 
 body {
   background: var(--bg);
@@ -294,12 +321,18 @@ body {
   padding: 20px 24px 16px;
 }
 
+.card-headline-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
 .card-headline {
   font-size: 15.5px;
   font-weight: 600;
   color: var(--text);
   line-height: 1.4;
-  flex: 1;
 }
 
 .card-meta {
@@ -431,6 +464,47 @@ body {
   background: rgba(139,92,246,0.12);
   border-color: rgba(139,92,246,0.3);
   color: #c4b5fd;
+}
+
+/* ── Theme toggle (nav button) ────────────────────────────── */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  margin-top: 8px;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.theme-toggle:hover {
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--surface-3);
+}
+
+/* ── Company name chip ────────────────────────────────────── */
+.company-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.company-chip::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
 }
 
 /* ── Buttons ──────────────────────────────────────────────── */
