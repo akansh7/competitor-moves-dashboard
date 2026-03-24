@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Competitor Moves Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="8" fill="url(#logoGrad)"/>
+          <path d="M8 14h12M14 8v12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#6366f1"/>
+              <stop offset="1" stop-color="#8b5cf6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span>CompeteIQ</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-item active" href="#">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 6a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2zm0 6a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z"/></svg>
+          Intelligence Feed
+        </a>
+        <a class="nav-item" href="#" onclick="showApiDocs(); return false;">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          API Docs
+        </a>
+      </nav>
+      <div class="sidebar-status">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Connecting…</span>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="top-bar">
+        <div>
+          <h1 class="page-title">Competitor Intelligence Feed</h1>
+          <p class="page-subtitle">Real-time signals from competitor hiring & strategy</p>
+        </div>
+        <div class="top-bar-actions">
+          <div class="stat-pill" id="totalPill">0 reports</div>
+          <button class="btn-ghost" onclick="clearAll()">Clear All</button>
+        </div>
+      </header>
+
+      <!-- Stats row -->
+      <div class="stats-row" id="statsRow" style="display:none">
+        <div class="stat-card">
+          <div class="stat-label">Total Reports</div>
+          <div class="stat-value" id="statTotal">0</div>
+        </div>
+        <div class="stat-card threat-high">
+          <div class="stat-label">High Threat</div>
+          <div class="stat-value" id="statHigh">0</div>
+        </div>
+        <div class="stat-card threat-medium">
+          <div class="stat-label">Medium Threat</div>
+          <div class="stat-value" id="statMedium">0</div>
+        </div>
+        <div class="stat-card threat-low">
+          <div class="stat-label">Low Threat</div>
+          <div class="stat-value" id="statLow">0</div>
+        </div>
+      </div>
+
+      <!-- Feed -->
+      <div class="feed" id="feed">
+        <div class="empty-state" id="emptyState">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="16" width="48" height="36" rx="4" stroke="currentColor" stroke-width="2"/>
+            <path d="M20 28h24M20 36h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="48" cy="16" r="8" fill="url(#eGrad)" stroke="white" stroke-width="2"/>
+            <path d="M48 12v4l2 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="eGrad" x1="40" y1="8" x2="56" y2="24" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <h3>No intel yet</h3>
+          <p>POST a report to <code>/api/report</code> and it will appear here instantly.</p>
+          <button class="btn-primary" onclick="showApiDocs()">View API Docs</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- API Docs Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="hideApiDocs()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2>API Reference</h2>
+        <button class="modal-close" onclick="hideApiDocs()">✕</button>
+      </div>
+      <div class="modal-body">
+        <h3>POST /api/report</h3>
+        <p>Push a new competitor intelligence report to the dashboard.</p>
+        <pre><code id="examplePayload">{
+  "strategic_headline": "string",
+  "what_they_are_building": "string",
+  "team_growth_signals": "string",
+  "competitive_threat_level": "High | Medium | Low",
+  "threat_rationale": "string",
+  "recommended_action": "string",
+  "key_skills_emerging": ["string"],
+  "top_job_titles": ["string"]
+}</code></pre>
+        <h3>GET /api/reports</h3>
+        <p>Retrieve all stored reports as JSON.</p>
+        <h3>DELETE /api/reports</h3>
+        <p>Clear all stored reports.</p>
+        <h3>WebSocket</h3>
+        <p>Connect to <code>ws://localhost:3000</code> to receive live updates.</p>
+        <div class="curl-example">
+          <div class="curl-label">Example cURL</div>
+          <pre><code>curl -X POST http://localhost:3000/api/report \
+  -H "Content-Type: application/json" \
+  -d '{
+    "strategic_headline": "Adobe is embedding GenAI...",
+    "what_they_are_building": "They are investing in...",
+    "team_growth_signals": "One mid-level position...",
+    "competitive_threat_level": "Medium",
+    "threat_rationale": "While hiring volume is low...",
+    "recommended_action": "Our GTM team should...",
+    "key_skills_emerging": ["iOS Development", "Swift", "GenAI"],
+    "top_job_titles": ["Senior iOS Developer - GenAI"]
+  }'</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
